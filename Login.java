@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
 
 class LoginFrame extends JFrame implements ActionListener {
  
@@ -17,6 +19,7 @@ class LoginFrame extends JFrame implements ActionListener {
     JButton resetButton = new JButton("REGISTER");
     JCheckBox showPassword = new JCheckBox("Show Password");
     private Boolean userFound = false;
+    private boolean visaFound = false;
     public static String userText;
     public static String pwdText;
  
@@ -70,9 +73,37 @@ class LoginFrame extends JFrame implements ActionListener {
                     System.out.println(credentials[0]+credentials[1]);
                     if (userText.equalsIgnoreCase(credentials[0]) && pwdText.equalsIgnoreCase(credentials[1])) {
                         JOptionPane.showMessageDialog(this, "Login Successful");
-                        dispose();
                         userFound = true;
-                        MainFrame frame1 = new MainFrame();
+                        try {
+                            File Obj1 = new File("Visa.txt");
+                            Scanner Reader1 = new Scanner(Obj1);
+                            System.out.println("Came upto this");
+                            while (Reader1.hasNextLine()) {
+                                String data1 = Reader1.nextLine();
+                                System.out.println(data1);
+                                String[] visaData = data1.split(" ",4);
+                                dispose();
+
+                                System.out.println(visaData[0]+" "+visaData[1]);
+                                if(userText.equals(visaData[0])){
+                                    visaFound = true;
+                                }
+                                else{
+                                    visaFound = false;
+                                }
+                            }
+                            Reader1.close();
+                        }
+                        catch (IOException except) {
+                            System.out.println("An error has occurred.");
+                            except.printStackTrace();
+                        }
+                        if(visaFound == true){
+                            appliedFrame aFrame = new appliedFrame();
+                        }
+                        else{
+                            MainFrame frame = new MainFrame();
+                        }
                         break;
                     }    
                 }
